@@ -1,0 +1,59 @@
+name: Pipeline
+on: push
+jobs:
+  Prepare:
+    runs-on: self-hosted
+    outputs:
+      sha: ${{ steps.vars.outputs.sha }}
+      env: ${{ steps.vars.outputs.env }}
+    steps:
+      - name: Define variables
+        id: vars
+        run: |
+          if [[ ${{ github.ref_name }} == "main" ]]; then
+            target="prod"
+          else
+            target="dev"
+          fi
+          echo "::set-output name=env::${target}"
+          echo "::set-output name=sha::${GITHUB_SHA::7}"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ${{ steps.vars.outputs.sha }}
+  Build:
+    runs-on: self-hosted
+    needs: Prepare
+    env:
+      sha: ${{ needs.Prepare.outputs.sha }}
+    environment: ${{ needs.Prepare.outputs.env }}
+    steps:
+      - name: Install dependencies
+        working-directory: ${{ env.sha }}
+        run: npm install
+      - name: Generate config
+        working-directory: ${{ env.sha }}
+        run: echo -n ${{ secrets.CONFIG64 }} | base64 --decode > config.json
+  Deployment:
+    runs-on: self-hosted
+    needs: [Prepare, Build]
+    environment: ${{ needs.Prepare.outputs.env }}
+    env:
+      sha: ${{ needs.Prepare.outputs.sha }}
+    steps:
+      - name: Deploy
+        run: rsync -a ${{ env.sha }} deploy:/memeho/
+      - name: Restart application
+        run: >
+          ssh -t deploy '
+          npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
+          && ln -sf ./${{ env.sha }} ./${{ needs.Prepare.outputs.env }}
+          && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
+          '
+  Cleanup:
+    runs-on: self-hosted
+    if: success()
+    needs: [Prepare, Build, Deployment]
+    steps:
+      - name: Cleanup
+        run: rm -rf "${{ github.workspace }}"
