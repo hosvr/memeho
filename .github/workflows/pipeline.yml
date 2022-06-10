@@ -49,7 +49,7 @@ jobs:
           npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
           && cp -v ${{ needs.Prepare.outputs.env }}/data/tarkovData.sqlite data/tarkovData.sqlite || :
           && ln -svfT ${{ env.sha }} ${{ needs.Prepare.outputs.env }}
-          && cp -v data/tarkovData.sqlite ${{ needs.Prepare.outputs.env }}/data/tarkovData.sqlite
+          && cp -v data ${{ needs.Prepare.outputs.env }}/
           && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
           '
   Cleanup:
