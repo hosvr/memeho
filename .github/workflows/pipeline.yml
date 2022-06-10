@@ -47,9 +47,9 @@ jobs:
         run: >
           ssh -t deploy '
           npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
-          && cp -v ${{ needs.Prepare.outputs.env }}/data/* data/* || :
+          && cp -rv ${{ needs.Prepare.outputs.env }}/data . || :
           && ln -svfT ${{ env.sha }} ${{ needs.Prepare.outputs.env }}
-          && cp -v data/* ${{ needs.Prepare.outputs.env }}/data/*
+          && cp -rv data ${{ needs.Prepare.outputs.env }}/
           && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
           '
   Cleanup:
