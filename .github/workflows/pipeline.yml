@@ -41,7 +41,9 @@ jobs:
     env:
       sha: ${{ needs.Prepare.outputs.sha }}
     steps:
-        - name: Deploy and start application
+        - name: Deploy
+          run: rsync -a ${{ env.sha }} deploy:/memeho/
+        - name: Restart application
           uses: dawidd6/action-ansible-playbook@v2
           with:
             playbook: playbook.yml
@@ -50,8 +52,7 @@ jobs:
               -i mcity.gg,
               -e package=${{ needs.Prepare.outputs.sha }}
               -e version=${{ needs.Prepare.outputs.env }}
-      # - name: Deploy
-      #   run: rsync -a ${{ env.sha }} deploy:/memeho/
+
       # - name: Restart application
       #   run: >
       #     ssh -t deploy '
