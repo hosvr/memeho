@@ -41,17 +41,26 @@ jobs:
     env:
       sha: ${{ needs.Prepare.outputs.sha }}
     steps:
-      - name: Deploy
-        run: rsync -a ${{ env.sha }} deploy:/memeho/
-      - name: Restart application
-        run: >
-          ssh -t deploy '
-          npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
-          && cp -v ${{ needs.Prepare.outputs.env }}/data/tarkovData.sqlite data/tarkovData.sqlite || :
-          && ln -svfT ${{ env.sha }} ${{ needs.Prepare.outputs.env }}
-          && cp -v data ${{ needs.Prepare.outputs.env }}/
-          && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
-          '
+        - name: Deploy and start application
+          uses: dawidd6/action-ansible-playbook@v2
+          with:
+            playbook: playbook.yml
+            directory: ./
+            options: |
+              -i mcity.gg,
+              -e package=${{ needs.Prepare.outputs.sha }}
+              -e version=${{ needs.Prepare.outputs.env }}
+      # - name: Deploy
+      #   run: rsync -a ${{ env.sha }} deploy:/memeho/
+      # - name: Restart application
+      #   run: >
+      #     ssh -t deploy '
+      #     npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
+      #     && cp -v ${{ needs.Prepare.outputs.env }}/data/tarkovData.sqlite data/tarkovData.sqlite || :
+      #     && ln -svfT ${{ env.sha }} ${{ needs.Prepare.outputs.env }}
+      #     && cp -v data ${{ needs.Prepare.outputs.env }}/
+      #     && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
+      #     '
   Cleanup:
     runs-on: self-hosted
     if: success()

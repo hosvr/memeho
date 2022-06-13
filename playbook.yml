@@ -1,0 +1,61 @@
+# Playbook for deployment
+---
+- name: Deploy package
+  hosts: all
+  gather_facts: false
+  remote_user: memeho
+  tasks:
+    - name: Pre check variables
+      fail:
+        msg: "{{ item }} is undefined"
+      when: item is undefined
+      loop:
+        - "{{ package }}"
+        - "{{ version }}"
+    
+    - name: Deploy package
+      copy:
+        src: {{ package }}
+        dest: "/bot/{{ package }}"
+
+    - name: Backup existing database
+      ansible.builtin.command:
+        argv: 
+          - sqlite3
+          - "/bot/{{ version }}/data/tarkovData.sqlite" 
+          - '.backup /bot/data/tarkovData-{{ version }}-backup.sqlite'
+
+    - name: Set process name - dev
+      when: version == "dev"
+      set_fact:
+        process_name: "memeho-dev"
+
+    - name: Set process name - prod
+      when: version == "prod"
+      set_fact:
+        process_name: "memeho"
+
+    - name: Stop current process
+      pm2:
+        chdir: "/bot/{{ version }}"
+        name: "{{ process_name }}"
+        state: absent
+
+    - name: Update version link
+      ansible.builtin.file:
+        src: "/bot/{{ package }}"
+        dest: "{{ version }}"
+        state: link
+    
+    - name: Restore backup database
+      ansible.builtin.command:
+        argv: 
+          - cp -v
+          - "/bot/data"
+          - "/bot/{{ version }}/"
+
+    - name: Start application
+      pm2:
+        chdir: "/bot/{{ version }}"
+        name: "{{ process_name }}"
+        state: started
