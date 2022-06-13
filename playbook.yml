@@ -39,7 +39,7 @@
     - name: Update version link
       ansible.builtin.file:
         src: "/bot/{{ package }}"
-        dest: "{{ version }}"
+        dest: "/bot/{{ version }}"
         state: link
     
     - name: Restore backup database
