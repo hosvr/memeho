@@ -16,7 +16,7 @@
     - name: Deploy package
       copy:
         src: "../{{ package }}"
-        dest: "/bot/{{ package }}"
+        dest: "/bot/"
 
     - name: Backup existing database
       ansible.builtin.command:
