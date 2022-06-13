@@ -15,7 +15,7 @@
     
     - name: Deploy package
       copy:
-        src: "{{ package }}"
+        src: ../"{{ package }}"
         dest: "/bot/{{ package }}"
 
     - name: Backup existing database
