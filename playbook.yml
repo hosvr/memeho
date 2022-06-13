@@ -46,7 +46,7 @@
       ansible.builtin.command:
         argv: 
           - cp
-          - "-v"
+          - "-rv"
           - "/bot/data"
           - "/bot/{{ version }}/"
 
