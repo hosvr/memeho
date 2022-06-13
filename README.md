@@ -6,9 +6,17 @@ Discord bot for `memellenial city` server
 * [commands](#commands) 
 * [events](#events) 
 
-# deploy
+# ci/cd
 
-To deploy the bot, a secrets file `config.json` is required at the root directory. Create the file with the following information:
+Packages required for build and deployment:
+* nodesjs:16+
+* sqlite3
+* ansible
+* ansible-modules-pm2
+
+# starting the bot
+
+To start the bot, a secrets file `config.json` is required at the root directory. The config files requires the following:
 
 ```
 {
@@ -20,7 +28,7 @@ To deploy the bot, a secrets file `config.json` is required at the root director
 }
 ```
 
-Ensure that the following directories are created: `/data`, `/commands`
+Run `npm start` for an attached CLI session, otherwise `npm run start-dev` can be run to use `pm2` to start the process
 
 # commands
 
