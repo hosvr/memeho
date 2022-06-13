@@ -55,3 +55,4 @@
         chdir: "/bot/{{ version }}"
         name: "{{ process_name }}"
         state: started
+        script: index.js
