@@ -44,7 +44,7 @@ jobs:
         - name: Deploy and start application
           uses: dawidd6/action-ansible-playbook@v2
           with:
-            playbook: playbook.yml
+            playbook: ${{ needs.Prepare.outputs.sha }}/playbook.yml
             directory: ./
             options: |
               -i mcity.gg,
