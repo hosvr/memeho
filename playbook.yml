@@ -45,7 +45,8 @@
     - name: Restore backup database
       ansible.builtin.command:
         argv: 
-          - cp -v
+          - cp
+          - "-v"
           - "/bot/data"
           - "/bot/{{ version }}/"
 
