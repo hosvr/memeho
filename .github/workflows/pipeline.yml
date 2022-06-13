@@ -42,7 +42,7 @@ jobs:
       sha: ${{ needs.Prepare.outputs.sha }}
     steps:
         - name: Deploy
-          run: rsync -a ${{ env.sha }} deploy:/memeho/
+          run: rsync -a ${{ env.sha }} deploy:/bot/
         - name: Restart application
           uses: dawidd6/action-ansible-playbook@v2
           with:
