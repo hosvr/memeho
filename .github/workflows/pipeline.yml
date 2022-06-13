@@ -41,9 +41,9 @@ jobs:
     env:
       sha: ${{ needs.Prepare.outputs.sha }}
     steps:
-        - name: Deploy
-          run: rsync -a ${{ env.sha }} deploy:/bot/
-        - name: Restart application
+        # - name: Deploy
+        #   run: rsync -a ${{ env.sha }} deploy:/bot/
+        - name: Deployment playbook
           uses: dawidd6/action-ansible-playbook@v2
           with:
             playbook: playbook.yml

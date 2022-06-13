@@ -1,6 +1,5 @@
-# Playbook for deployment
 ---
-- name: Deploy package
+- name: Deployment playbook
   hosts: all
   gather_facts: false
   remote_user: memeho
@@ -12,6 +11,11 @@
       loop:
         - "{{ package }}"
         - "{{ version }}"
+
+    - name: Deploy package
+      ansible.posix.synchronize:
+        src: "../{{ package }}"
+        dest: /bot/
 
     - name: Backup existing database
       ansible.builtin.command:
