@@ -50,7 +50,7 @@
       ansible.builtin.file:
         path: "/bot/{{ version }}/data"
         state: directory
-        mode: 755
+        mode: '755'
 
     - name: Restore backup database
       ansible.builtin.command:
