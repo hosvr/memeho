@@ -161,7 +161,7 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
   let approved = false
   collector.on('collect', async(reaction, user) => {
     // Approvals cannot come from author
-    if (user.id == recordAuthor){ return }
+    if (user.id == recordAuthor.id){ return }
 
     // Either participant in the TK instance can approve for instant approval
     if (user.id == killer.id || user.id == victim.id){

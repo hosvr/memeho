@@ -26,7 +26,7 @@ const run = async(bot, interaction) => {
       output = await tkUser(interaction, bot.tables.eftUsers, bot.tables.teamKills)
       break;
     case 'add':
-      recordAuthor = interaction.member.id
+      recordAuthor = interaction.member
       tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
       return
   }
