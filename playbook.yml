@@ -46,13 +46,19 @@
         dest: "/bot/{{ version }}"
         state: link
     
+    - name: Ensure data directory exists
+      ansible.builtin.file:
+        path: "/bot/{{ version }}/data"
+        state: directory
+        mode: '755'
+
     - name: Restore backup database
       ansible.builtin.command:
         argv: 
           - cp
-          - "-rv"
-          - "/bot/data"
-          - "/bot/{{ version }}/"
+          - "-v"
+          - "/bot/data/tarkovData-{{ version }}-backup.sqlite"
+          - "/bot/{{ version }}/data/tarkovData.sqlite"
 
     - name: Start application
       pm2:

@@ -15,6 +15,7 @@ const run = async(bot, interaction) => {
     return interaction.reply({content: "Only guild members with the tarkov role may use this command", ephemeral: true})}
   
   const sub = interaction.options.getSubcommand()
+  currentWipe = '2021-12-12'
   let output = {}
 
   switch(sub){
@@ -25,10 +26,11 @@ const run = async(bot, interaction) => {
       output = await tkUser(interaction, bot.tables.eftUsers, bot.tables.teamKills)
       break;
     case 'add':
-      output = await tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills)
-      break;
+      recordAuthor = interaction.member
+      tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
+      return
   }
-  return interaction.reply({ content: output.content, ephemeral: output.ephemeral })
+  return interaction.reply({content: output.content, ephemeral: output.ephemeral})
 }
 
 module.exports = {
@@ -82,7 +84,7 @@ module.exports = {
         {
           "name": "comment",
           "description": "Add any additional comment for this team kill",
-          "type": 6,
+          "type": 3,
           "required": false
         }
       ]
