@@ -136,7 +136,7 @@ const tkUser = async(interaction, eftUsers, teamKills) => {
 const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, currentWipe) => {
   const killer = interaction.options.getUser("killer")
   const victim = interaction.options.getUser("victim")
-  const comment = interaction.options.getString("comment")
+  let comment = interaction.options.getString("comment")
 
   // Check for valid killer and victim
   const validKiller = await isEftUser(eftUsers, killer)
@@ -147,7 +147,8 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
   if(!validVictim){
     return interaction.reply({ content: `${victim} is not a valid tarkov member, please ensure the user has the tarkov role`, ephemeral: true })
   }
-  
+  if(!comment){ comment = `no comment added` }
+
   // Initial Bot reply
   content = `Pending record: ${killer} -> ${victim} (${comment})`
   message = await interaction.reply({content: content, ephemeral: false, fetchReply: true})
@@ -155,7 +156,7 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
 
   // Listen for approvals
   const filter = (reaction, user) => { return reaction.emoji.name === '👍' && user.id != botId }
-  const collector = message.createReactionCollector({ filter, time: 1000 * 60 * 5 });
+  const collector = message.createReactionCollector({ filter, time: 1000 * 60 * 3 });
 
   let approvals = []
   let approved = false
@@ -165,11 +166,12 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
 
     // Either participant in the TK instance can approve for instant approval
     if (user.id == killer.id || user.id == victim.id){
+      approvals.push(user.username)
       approved = true
       collector.stop("TK participant has approved")
     }
 
-    // Anyone other tarkov members can approve
+    // Any other tarkov members can approve
     tarkovMember = await isEftUser(eftUsers, user)
     if(tarkovMember){
       approvals.push(user.username)
@@ -187,12 +189,14 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
   collector.on('end', async(collected) => {
     if(!approved){ return message.reply("Team kill instance not recorded: not enough approvals") }
     if(approved){ 
+      console.log(`TeamKill instance approved: ${approvals}`)
       const tkAddInstance = await teamKills.create({
         killer: killer.id,
         victim: victim.id,
         comment: comment,
         wipe: currentWipe
       })
+      console.log(`Team kill instance recorded: ${content}`)
       return message.reply("Team kill instance recorded") 
     }
   });
