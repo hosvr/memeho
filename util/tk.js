@@ -133,22 +133,71 @@ const tkUser = async(interaction, eftUsers, teamKills) => {
   return output
 }
 
-const tkAdd = async(interaction, eftUsers, teamKills) => {
-  // Check for valid killer and victim
+const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, currentWipe) => {
   const killer = interaction.options.getUser("killer")
+  const victim = interaction.options.getUser("victim")
+  const comment = interaction.options.getString("comment")
+
+  // Check for valid killer and victim
   const validKiller = await isEftUser(eftUsers, killer)
   if(!validKiller){
-    let output = { content: `${killer} is not a valid tarkov member, please ensure the user has the tarkov role`, ephemeral: true }
-    return output
+    return interaction.reply({ content: `${killer} is not a valid tarkov member, please ensure the user has the tarkov role`, ephemeral: true })
   }
-  const victim = interaction.options.getUser("victim")
   const validVictim = await isEftUser(eftUsers, victim)
   if(!validVictim){
-    let output = { content: `${victim} is not a valid tarkov member, please ensure the user has the tarkov role`, ephemeral: true }
-    return output
+    return interaction.reply({ content: `${victim} is not a valid tarkov member, please ensure the user has the tarkov role`, ephemeral: true })
   }
+  
+  // Initial Bot reply
+  content = `Pending record: ${killer} -> ${victim} (${comment})`
+  message = await interaction.reply({content: content, ephemeral: false, fetchReply: true})
+  await message.react('👍')
 
-  return { content: "placeholder add", ephemeral: false }
+  // Listen for approvals
+  const filter = (reaction, user) => { return reaction.emoji.name === '👍' && user.id != botId }
+  const collector = message.createReactionCollector({ filter, time: 1000 * 60 * 5 });
+
+  let approvals = []
+  let approved = false
+  collector.on('collect', async(reaction, user) => {
+    // Approvals cannot come from author
+    if (user.id == recordAuthor){ return }
+
+    // Either participant in the TK instance can approve for instant approval
+    if (user.id == killer.id || user.id == victim.id){
+      approved = true
+      collector.stop("TK participant has approved")
+    }
+
+    // Anyone other tarkov members can approve
+    tarkovMember = await isEftUser(eftUsers, user)
+    if(tarkovMember){
+      approvals.push(user.username)
+      return
+    }
+    
+    // Approve if at least 2 non-participants approve
+    if(approvals.length>=2){
+      approved = true
+      collector.stop("Approval numbers have been reached")
+      return
+    }
+  });
+
+  collector.on('end', async(collected) => {
+    if(!approved){ return message.reply("Team kill instance not recorded: not enough approvals") }
+    if(approved){ 
+      const tkAddInstance = await teamKills.create({
+        killer: killer.id,
+        victim: victim.id,
+        comment: comment,
+        wipe: currentWipe
+      })
+      return message.reply("Team kill instance recorded") 
+    }
+  });
+
+  return
 }
 
 module.exports = {
