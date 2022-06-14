@@ -41,15 +41,15 @@ jobs:
     env:
       sha: ${{ needs.Prepare.outputs.sha }}
     steps:
-      - name: Deploy
-        run: rsync -a ${{ env.sha }} deploy:/memeho/
-      - name: Restart application
-        run: >
-          ssh -t deploy '
-          npm run stop-${{ needs.Prepare.outputs.env }} --prefix ${{ needs.Prepare.outputs.env }} || :
-          && ln -sf ./${{ env.sha }} ./${{ needs.Prepare.outputs.env }}
-          && npm run start-${{ needs.Prepare.outputs.env }}  --prefix ${{ needs.Prepare.outputs.env }}
-          '
+      - name: Deployment playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: playbook.yml
+          directory: ${{ needs.Prepare.outputs.sha }}
+          options: |
+            -i mcity.gg,
+            -e package=${{ needs.Prepare.outputs.sha }}
+            -e version=${{ needs.Prepare.outputs.env }}
   Cleanup:
     runs-on: self-hosted
     if: success()

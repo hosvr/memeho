@@ -39,3 +39,4 @@ deploySlashCommands(client)
 
 module.exports = bot
 client.login(token);
+
