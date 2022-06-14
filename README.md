@@ -12,7 +12,8 @@ Packages required for build and deployment:
 * nodesjs:16+
 * sqlite3
 * ansible
-* ansible-modules-pm2
+* pip install ansible-modules-pm2
+* ansible-galaxy collection install ansible.posix
 
 # starting the bot
 
