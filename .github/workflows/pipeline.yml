@@ -50,7 +50,6 @@ jobs:
             -i mcity.gg,
             -e package=${{ needs.Prepare.outputs.sha }}
             -e version=${{ needs.Prepare.outputs.env }}
-            -v
   Cleanup:
     runs-on: self-hosted
     if: success()
