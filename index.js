@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const { token, dbUser, dbPassword } = require('./config.json')
 const { deploySlashCommands } = require('./util/functions')
 
-const client = new Client({ intents: [ "GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES" ] });
+const client = new Client({ intents: [ "GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS" ] });
 
 const sequelize = new Sequelize('tarkovData', dbUser, dbPassword, {
 	host: 'localhost',
