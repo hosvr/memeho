@@ -62,6 +62,14 @@ module.exports = {
 }
 ```
 
+# tarkov
+
+the bot's major function is to track the discord's tarkov stats. right now, manual work needs to be done for the following:
+
+New wipe:
+  * Add the wipe into the wipe array: `slashcommands/tk.js:tarkovWipes`
+  * Update wipe variable: `slashcommands/tk.js:currentWipe`
+
 ## Resources
 
 * [Discord slash commands](https://discord.com/developers/docs/interactions/application-commands)

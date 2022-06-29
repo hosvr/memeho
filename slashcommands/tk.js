@@ -4,7 +4,8 @@ const tarkovWipes = [
   { name: '2020-05-20', value: '2020-05-20' },
   { name: '2020-12-25', value: '2020-12-25' },
   { name: '2021-06-29', value: '2021-06-29' },
-  { name: '2021-12-12', value: '2021-12-12' }
+  { name: '2021-12-12', value: '2021-12-12' },
+  { name: '2022-06-29', value: '2022-06-29' },
 ]
 
 const run = async(bot, interaction) => {
@@ -15,7 +16,7 @@ const run = async(bot, interaction) => {
     return interaction.reply({content: "Only guild members with the tarkov role may use this command", ephemeral: true})}
   
   const sub = interaction.options.getSubcommand()
-  currentWipe = '2021-12-12'
+  currentWipe = '2022-06-29'
   let output = {}
 
   switch(sub){
