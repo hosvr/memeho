@@ -156,7 +156,7 @@ const tkAdd = async(interaction, eftUsers, teamKills, recordAuthor, botId, curre
 
   // Listen for approvals
   const filter = (reaction, user) => { return reaction.emoji.name === '👍' && user.id != botId }
-  const collector = message.createReactionCollector({ filter, time: 1000 * 60 * 3 });
+  const collector = message.createReactionCollector({ filter, time: 1000 * 60 * 15 });
 
   let approvals = []
   let approved = false
