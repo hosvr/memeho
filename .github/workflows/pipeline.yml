@@ -1,5 +1,7 @@
 name: Pipeline
-on: push
+on: 
+  - push
+  - workflow_dispatch
 jobs:
   Prepare:
     runs-on: self-hosted
