@@ -2,4 +2,3 @@ name = "memeho"
 main = "src/index.js"
 compatibility_date = "2022-12-01"
 account_id = "681a0459b3c65398d73979cf1fa918cc"
-workers_dev = true

@@ -10,7 +10,6 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
-    "buffer": "^6.0.3",
-    "tweetnacl": "^1.0.3"
+    "discord-interactions": "^3.2.0"
   }
 }

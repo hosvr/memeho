@@ -1,35 +1,29 @@
-import nacl from 'tweetnacl';
-const Buffer = require('buffer/').Buffer;
+import {verifyKey} from 'discord-interactions';
+import {handleInteraction} from './handler';
 
-async function handleRequest(request) {
-  if (request.method === 'POST') {
-    const req = await request.json()
+export default {
+	async fetch(request, env, ctx) {
 
-    const headers = request.headers
-    const PUBLIC_KEY = 'cd677acec866ef0eb5879773bdcb9bb4c27f283fb96d1d97428c733bf4545929'
-    const signature = headers.get('X-Signature-Ed25519')
-    const timestamp = headers.get('X-Signature-Timestamp')
+		let method = request.method
+		if (method != 'POST'){
+			return new Response('',{status: 405})
+		}
 
-    if (signature && timestamp) {
-      const isVerified = nacl.sign.detached.verify(
-        Buffer(timestamp + JSON.stringify(req)),
-        Buffer(signature, 'hex'),
-        Buffer(PUBLIC_KEY, 'hex'),
-      )
-
-      if (!isVerified) {
-        return new Response(JSON.stringify(req), { status: 401 })
-      } else {
-        return new Response(JSON.stringify(req), { status: 200 })
-      }
-    }
-  }
-
-	if (request.method === 'GET') {
-		return new Response('Hello World!', { status: 200 })
-	}
-}
-
-addEventListener('fetch', event => {
-	return event.respondWith((handleRequest(event.request)))
-})
+		// mandatory discord verification
+		let signature = request.headers.get('x-signature-ed25519')
+		let timestamp = request.headers.get('x-signature-timestamp')
+		let isValidRequest = verifyKey(
+			await request.clone().arrayBuffer(),
+			signature,
+			timestamp,
+			env.CLIENT_PUB_KEY,
+		)
+		if (!isValidRequest){
+			return new Response('Bad request signature', {status: 401})
+		}
+		
+		let body = await request.json()
+		console.log(body)
+		return await handleInteraction(body, request)
+	},
+};
