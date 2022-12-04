@@ -8,13 +8,8 @@ Serverless application using Cloudflare workers to handle discord interactions
 * `wrangler dev`
 * `wrangler publish`
 
-# default index
+Secrets: `wrangler secret put DISCORD_PUBLIC_KEY`
 
-```
-export default {
-	async fetch(request, env, ctx) {
-		return new Response(`Hello World!`);
-	},
-};
+# ci/cd
 
-```
+Github actions secrets: `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_TOKEN`

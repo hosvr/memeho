@@ -16,14 +16,14 @@ export default {
 			await request.clone().arrayBuffer(),
 			signature,
 			timestamp,
-			env.CLIENT_PUB_KEY,
+			env.DISCORD_PUBLIC_KEY,
 		)
 		if (!isValidRequest){
 			return new Response('Bad request signature', {status: 401})
 		}
 		
+		// interaction
 		let body = await request.json()
-		console.log(body)
 		return await handleInteraction(body, request)
 	},
 };
