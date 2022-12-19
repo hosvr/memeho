@@ -33,9 +33,11 @@ more options are available under [Discord Application Commands](https://discord.
 # ci/cd
 
 Github actions secrets: 
+
 * `DISCORD_TOKEN`
 * `DISCORD_CLIENT_ID`
 * `DISCORD_GUILD_ID`
+* `CLOUDFLARE_TOKEN`
 
 # resources
 
