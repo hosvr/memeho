@@ -27,31 +27,4 @@ export async function handleInteraction(body, request) {
   })
 
   return new Response(response, {headers: {'Content-type': 'application/json'}, status: 200})
-
-    // switch(json.data.name) {
-    //   case 'echo':
-    //     return new Response(
-    //       JSON.stringify({
-    //         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //         data: {
-    //             tts: false,
-    //             content: json.data.options[0].value, // we should be pulling based on the `name` property, actually
-    //             embeds: [],
-    //             allow_mentions: {parse: []},
-    //         },
-    //       }),
-    //     )
-    //   default:
-    //     return new Response(
-    //       JSON.stringify({
-    //         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //         data: {
-    //             tts: false,
-    //             content: 'Sorry, we experienced a problem and a command was sent that doesn\'t exist!',
-    //             embeds: [],
-    //             allow_mentions: {parse: []},
-    //         },
-    //       }),
-    //     )
-    // }
 }
