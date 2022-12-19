@@ -1,4 +1,4 @@
-name: Pipeline
+name: Serverless Pipeline
 on:
   - push
   - workflow_dispatch
