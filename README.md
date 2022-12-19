@@ -26,7 +26,7 @@ Secrets: `wrangler secret put SECRET_NAME`
 module.exports = {
   name: "command name",
   description: "command description",
-
+}
 ```
 more options are available under [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
 
