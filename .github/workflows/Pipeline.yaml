@@ -3,7 +3,7 @@ on:
   - push
   - workflow_dispatch
 jobs:
-  Deploy:
+  Pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DISCORD_CLIENT_ID: "336671031840473093"
           DISCORD_GUILD_ID: "513185519702900779"
-      # - name: Publish
-      #   uses: cloudflare/wrangler-action@2.0.0
-      #   with:
-      #     apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
