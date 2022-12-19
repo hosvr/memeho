@@ -2,3 +2,6 @@ name = "memeho"
 main = "src/index.js"
 compatibility_date = "2022-12-01"
 account_id = "681a0459b3c65398d73979cf1fa918cc"
+
+[vars]
+DISCORD_PUBLIC_KEY = "cd677acec866ef0eb5879773bdcb9bb4c27f283fb96d1d97428c733bf4545929"
