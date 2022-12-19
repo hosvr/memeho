@@ -15,6 +15,10 @@ jobs:
         run: npm ci
       - name: Register Slash commands
         run: npm run register
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_CLIENT_ID: 336671031840473093
+          DISCORD_GUILD_ID: 513185519702900779
       # - name: Publish
       #   uses: cloudflare/wrangler-action@2.0.0
       #   with:
