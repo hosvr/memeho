@@ -16,7 +16,7 @@ export async function handleInteraction(body, request) {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       tts: false,
-      content: `<@${body.member.user.id}> PONG`,
+      content: `<@${body.member.user.id}> tk commands are currently being reworked. Please be patient, you can check the progress at https://github.com/hosvr/memeho/tree/cfw`,
       embeds: [],
       allow_mentions: {
         parse: ["users"],
