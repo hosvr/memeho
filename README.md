@@ -19,9 +19,8 @@ Secrets: `wrangler secret put SECRET_NAME`
 
 # creating a new command
 
-* add a new command in the `src/commands` folder
-* ensure that the command is imported into `src/handler.js` and `src/register.js`
-* the command must export the properties at a minimum:
+* add a package in the `src/commands` folder
+* the main package file must export the properties:
 ```
 const run = async(body) => {
   // content = the response message to the user
@@ -36,7 +35,7 @@ module.exports = {
 }
 ```
 
-more options are available under [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
+more options for types and subommands are available under [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
 
 # ci/cd
 
