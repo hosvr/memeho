@@ -10,7 +10,6 @@ const tarkovWipes = [
 
 const tarkovChannelId = "706856018969231361"
 const tarkovRole = "796051280451338241"
-const currentWipe = '2022-06-29'
 
 function tkList(tkdata, wipe){
   // get tk instances for specified wipe
@@ -63,10 +62,9 @@ const run = async(body, env) => {
   let output = {}
   switch(subcommand){
     case 'list':
-      let wipe = currentWipe
-      if (body.data.options[0].options[0]) {
-        wipe =  body.data.options[0].options[0].value
-      }
+      let wipe = env.CURRENT_WIPE
+      let specified_wipe = body.data.options[0].options[0]
+      if (specified_wipe) { wipe = specified_wipe.value }
       output = tkList(tkdata, wipe)
       break;
     // case 'user':
