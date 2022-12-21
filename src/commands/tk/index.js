@@ -1,4 +1,4 @@
-const yaml = require("js-yaml");
+const { tkList } = require('./list')
 
 const tarkovWipes = [
   { name: '2020-05-20', value: '2020-05-20' },
@@ -8,50 +8,12 @@ const tarkovWipes = [
   { name: '2022-06-29', value: '2022-06-29' },
 ]
 
-const tarkovChannelId = "706856018969231361"
-const tarkovRole = "796051280451338241"
-
-function tkList(tkdata, wipe){
-  // get tk instances for specified wipe
-  const tk_instances = tkdata.filter(i => i.wipe == wipe)
-  const output = formatOutput(tk_instances, wipe)
-  return { content: output, ephemeral: false }
-}
-
-function formatOutput(tk_instances, wipe){
-  let tk_summary = {}
-  // Unique list of killer ids
-  const killer_ids = new Set()
-  tk_instances.forEach(i => killer_ids.add(i.killer))
-
-  // Determine victims and number of deaths per killer
-  for (const killer of killer_ids){
-    const teamKills = tk_instances.filter(i => killer === i.killer)
-
-    // Unique list of victims per killer
-    const victim_ids = new Set()
-    teamKills.forEach(i => victim_ids.add(i.victim))
-
-    let victim_summary = {}
-    for (const victim of victim_ids){
-      const deaths = teamKills.filter(i=> victim === i.victim).length
-      victim_summary[`<@${victim}>`] = deaths
-    }
-
-    tk_summary[`<@${killer}>`] = victim_summary
-  }
-
-  const yaml_summary = yaml.load(JSON.stringify(tk_summary))
-  const output = `Recorded Team kills for wipe ${wipe}\n${yaml.dump(yaml_summary, {"indent": 8})}`
-  return output
-}
-
 const run = async(body, env) => {
   // Limit usage
-  // if (body.channel_id !== tarkovChannelId){
+  // if (body.channel_id !== env.tarkov_channel_id){
   //   return { content:"The `/tk` slash command can only be used in the Tarkov channel", ephemeral: true }
   // }
-  // if (!body.member.roles.includes(tarkovRole)){ 
+  // if (!body.member.roles.includes(env.tarkov_role_id)){ 
   //   return { content: "Only guild members with the tarkov role may use this command", ephemeral: true }
   // }
 
@@ -62,10 +24,10 @@ const run = async(body, env) => {
   let output = {}
   switch(subcommand){
     case 'list':
-      let wipe = env.CURRENT_WIPE
+      let wipe = env.tarkov_current_wipe
       let specified_wipe = body.data.options[0].options[0]
       if (specified_wipe) { wipe = specified_wipe.value }
-      output = tkList(tkdata, wipe)
+      output = tk_list(tkdata, wipe)
       break;
     // case 'user':
     //   // output = await tkUser(interaction, bot.tables.eftUsers, bot.tables.teamKills)
@@ -80,7 +42,6 @@ const run = async(body, env) => {
 
   return output
 }
-
 
 module.exports = {
   run,
