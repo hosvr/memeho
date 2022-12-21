@@ -1,6 +1,7 @@
 import {InteractionResponseType, InteractionType, InteractionResponseFlags} from 'discord-interactions'
+const tk = require('./commands/tk')
 
-export async function handleInteraction(body, request) {
+export async function handleInteraction(body, env) {
   // mandatory discord validation
   if (body.type == InteractionType.PING) {
     return new Response(JSON.stringify({type: InteractionResponseType.PONG}))
@@ -12,17 +13,26 @@ export async function handleInteraction(body, request) {
     return new Response('Invalid interaction received', {status: 400})
   }
 
+  const command = await tk.run(body, env)
+  var ephemeralFlag = InteractionResponseFlags.EPHEMERAL
+  if (command.ephemeral === false){ ephemeralFlag = 0 }
+
+  // const command = {}
+  // const ephemeralFlag = InteractionResponseFlags.EPHEMERAL
+  // command.content = `<@${body.member.user.id}> tk commands are currently being reworked. Please be patient, you can check the progress at https://github.com/hosvr/memeho/tree/cfw`
+
+
   let response = JSON.stringify({
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       tts: false,
-      content: `<@${body.member.user.id}> tk commands are currently being reworked. Please be patient, you can check the progress at https://github.com/hosvr/memeho/tree/cfw`,
+      content: command.content,
       embeds: [],
       allow_mentions: {
         parse: ["users"],
         users: [body.member.user.id]
       },
-      flags: InteractionResponseFlags.EPHEMERAL
+      flags: ephemeralFlag
     }
   })
 

@@ -23,11 +23,19 @@ Secrets: `wrangler secret put SECRET_NAME`
 * ensure that the command is imported into `src/handler.js` and `src/register.js`
 * the command must export the properties at a minimum:
 ```
+const run = async(body) => {
+  // content = the response message to the user
+  // ephemeral = whether the message should be a whisper(true) or public (false)
+  return { content: content, ephemeral: true}
+}
+
 module.exports = {
   name: "command name",
   description: "command description",
+  run
 }
 ```
+
 more options are available under [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
 
 # ci/cd

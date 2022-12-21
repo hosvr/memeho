@@ -24,6 +24,6 @@ export default {
 		
 		// interaction
 		let body = await request.json()
-		return await handleInteraction(body, request)
+		return await handleInteraction(body, env)
 	},
 };
