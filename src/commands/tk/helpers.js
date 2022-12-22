@@ -1,6 +1,6 @@
 const yaml = require("js-yaml");
 
-function formatOutput(tk_instances, wipe){
+function format_output(tk_instances, wipe){
   let tk_summary = {}
   // Unique list of killer ids
   const killer_ids = new Set()
@@ -29,5 +29,5 @@ function formatOutput(tk_instances, wipe){
 }
 
 module.exports = {
-  formatOutput
+  format_output
 }

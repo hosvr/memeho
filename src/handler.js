@@ -21,7 +21,6 @@ export async function handleInteraction(body, env) {
   // const ephemeralFlag = InteractionResponseFlags.EPHEMERAL
   // command.content = `<@${body.member.user.id}> tk commands are currently being reworked. Please be patient, you can check the progress at https://github.com/hosvr/memeho/tree/cfw`
 
-
   let response = JSON.stringify({
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
