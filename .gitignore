@@ -4,3 +4,4 @@ data/
 samples/
 data.json
 secrets.sh
+test.js
