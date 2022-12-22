@@ -2,6 +2,7 @@ const { tk_list } = require('./list')
 const { tker_stats } = require('./user')
 
 const tarkovWipes = [
+  { name: 'all', value: 'all' },
   { name: '2020-05-20', value: '2020-05-20' },
   { name: '2020-12-25', value: '2020-12-25' },
   { name: '2021-06-29', value: '2021-06-29' },
