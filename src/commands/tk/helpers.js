@@ -1,6 +1,6 @@
 const yaml = require("js-yaml");
 
-function format_output(tk_instances, wipe){
+function get_summary(tk_instances){
   let tk_summary = {}
   // Unique list of killer ids
   const killer_ids = new Set()
@@ -24,10 +24,10 @@ function format_output(tk_instances, wipe){
   }
 
   const yaml_summary = yaml.load(JSON.stringify(tk_summary))
-  const output = `Recorded Team kills for wipe ${wipe}\n${yaml.dump(yaml_summary, {"indent": 8})}`
-  return output
+  const yaml_output = yaml.dump(yaml_summary, {"indent": 8})
+  return yaml_output
 }
 
 module.exports = {
-  format_output
+  get_summary
 }

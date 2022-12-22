@@ -1,4 +1,5 @@
-const { tkList } = require('./list')
+const { tk_list } = require('./list')
+const { tker_stats } = require('./user')
 
 const tarkovWipes = [
   { name: '2020-05-20', value: '2020-05-20' },
@@ -19,19 +20,26 @@ const run = async(body, env) => {
 
   const tkdata = JSON.parse(await env.TKDATA.get("tkInstances"))
   const subcommand = body.data.options[0].name
-  // const suboption = body.data.options[0].options[0].name
 
-  let output = {}
+  let output = { content: `ERROR: Command "${subcommand}" failed to process`, ephemeral: true}
   switch(subcommand){
     case 'list':
       let wipe = env.tarkov_current_wipe
+      
       let specified_wipe = body.data.options[0].options[0]
       if (specified_wipe) { wipe = specified_wipe.value }
+
       output = tk_list(tkdata, wipe)
       break;
-    // case 'user':
-    //   // output = await tkUser(interaction, bot.tables.eftUsers, bot.tables.teamKills)
-    //   break;
+    case 'user':
+      let tker = body.member.user.id
+      if (!tker){ output = { content: `No user found: \`\`\`${JSON.stringify(body.member,null, 2)}\`\`\`` }; break}
+      
+      let specified_tker = body.data.options[0].options[0]
+      if (specified_tker){ tker = specified_tker.value }
+
+      output = tker_stats(tkdata, tker)
+      break;
     // case 'add':
     //   // recordAuthor = interaction.member
     //   // tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
