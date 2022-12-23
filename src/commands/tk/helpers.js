@@ -24,7 +24,7 @@ function get_summary(tk_instances){
   }
 
   const yaml_summary = yaml.load(JSON.stringify(tk_summary))
-  const yaml_output = yaml.dump(yaml_summary, {"indent": 8})
+  const yaml_output = yaml.dump(yaml_summary, {"indent": 4})
   return yaml_output
 }
 

@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2022-12-01"
 account_id = "681a0459b3c65398d73979cf1fa918cc"
 kv_namespaces = [
-  { binding = "TKDATA", id = "3e85f94b1d094184bf7d113515f41097" },
+  { binding = "TK_DATA", id = "3e85f94b1d094184bf7d113515f41097" },
 ]
 
 [vars]

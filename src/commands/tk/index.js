@@ -1,5 +1,6 @@
 const { tk_list } = require('./list')
 const { tker_stats } = require('./user')
+const { tk_add } = require('./add')
 
 const tarkovWipes = [
   { name: 'all', value: 'all' },
@@ -19,7 +20,7 @@ const run = async(body, env) => {
   //   return { content: "Only guild members with the tarkov role may use this command", ephemeral: true }
   // }
 
-  const tkdata = JSON.parse(await env.TKDATA.get("tkInstances"))
+  const tkdata = JSON.parse(await env.TK_DATA.get("tk_instances_test"))
   const subcommand = body.data.options[0].name
 
   let output = { content: `ERROR: Command "${subcommand}" failed to process`, ephemeral: true}
@@ -41,10 +42,28 @@ const run = async(body, env) => {
 
       output = tker_stats(tkdata, tker)
       break;
-    // case 'add':
-    //   // recordAuthor = interaction.member
-    //   // tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
-    //   return
+    case 'add':
+      const tk_instance_info = body.data.options[0].options
+      const killer = tk_instance_info.find(o => o.name === "killer").value
+      const victim = tk_instance_info.find(o => o.name === "victim").value
+      const date = new Date()
+
+      let comment = ""
+      const comment_object = tk_instance_info.find(o => o.name === "comment")
+      if (comment_object) { comment = comment_object.value }
+
+      const tk_instance = { 
+        "killer": killer,
+        "victim": victim,
+        "wipe": env.tarkov_current_wipe,
+        "comment": comment,
+        "date": date
+      }
+
+      output = await tk_add(tkdata, tk_instance, env.TK_DATA)
+      // recordAuthor = interaction.member
+      // tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
+      break;
     default:
       output = { content: `No valid subcommand was found: ${subcommand}`, ephemeral: true }
   }
