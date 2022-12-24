@@ -1,6 +1,8 @@
 // src/commands/tk/util.js
 // utility functions to assist subcommands
 
+const yaml = require("js-yaml");
+
 const get_tk_instances = async(env) => {
     const tk_instances = await env.TK_DATA.get("tk_instances_test", {type: "json"})
     return tk_instances
@@ -27,9 +29,13 @@ const write_tk_instance = async(body, env) => {
     const tk_instances = await get_tk_instances(env)
     tk_instances.push(tk_instance)
 
-    const output = await TK_DATA.put("tk_instances_test", JSON.stringify(tk_instances))
-    console.log("write instance:", output)
-    return output
+
+    try {
+        const output = await env.TK_DATA.put("tk_instances_test", JSON.stringify(tk_instances))
+        return `new tk instance recorded: <@${killer}> -> <@${victim}>`
+    } catch(err) {
+        throw(err)
+    }
 }
 
 
