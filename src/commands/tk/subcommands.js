@@ -36,7 +36,7 @@ const tk_user = async(body, env) => {
 
 const tk_add = async(body, env) => {
   const output = await write_tk_instance(body, env)
-  return { content: output, ephemeral: false }
+  return { content: output.content, ephemeral: output.ephemeral }
 }
 
 

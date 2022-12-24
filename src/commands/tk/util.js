@@ -29,12 +29,12 @@ const write_tk_instance = async(body, env) => {
     const tk_instances = await get_tk_instances(env)
     tk_instances.push(tk_instance)
 
-
     try {
         const output = await env.TK_DATA.put("tk_instances_test", JSON.stringify(tk_instances))
-        return `new tk instance recorded: <@${killer}> -> <@${victim}>`
+        return { content: `new tk instance recorded: <@${killer}> -> <@${victim}>`, ephemeral: false }
     } catch(err) {
-        throw(err)
+        console.error(err)
+        return { content:`ERROR:! Unable to record tk instance`, ephemeral: true }
     }
 }
 
