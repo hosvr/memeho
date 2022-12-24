@@ -23,6 +23,7 @@ Secrets: `wrangler secret put SECRET_NAME`
 * currently the `src/handler.js` explicitly imports the tk package, the handler will need to accomadate for new commands
 * the main package file must export the properties:
 ```
+// can be seperated into a new file if there is a lot of logic
 const run = async(body) => {
   // content = the response message to the user
   // ephemeral = whether the message should be a whisper(true) or public (false)

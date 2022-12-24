@@ -1,5 +1,6 @@
 // src/commands/tk/subcommands.js
 // subcommand execution for tk
+// each command must return an object with the properties { content, ephemeral }
 
 const { get_tk_instances, write_tk_instance, generate_summary } = require('./util')
 
