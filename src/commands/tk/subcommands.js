@@ -12,7 +12,7 @@ function tk_list(body, env){
 
   // get tk instances for specified wipe
   let tk_instances = get_tk_instances(env)
-  if (wipe !== "all"){ tk_instances = tkdata.filter(i => i.wipe == wipe) }
+  if (wipe !== "all"){ tk_instances = tk_instances.filter(i => i.wipe == wipe) }
 
   const summary = generate_summary(tk_instances, wipe)
   const output = `Recorded team kills for wipe ${wipe}:\n${summary}`
