@@ -9,6 +9,7 @@ const run = async(body, env) => {
     return { content: "Only guild members with the tarkov role may use this command", ephemeral: true }
   }
 
+  const subcommand = body.data.options[0].name
   let output = { content: `ERROR: Command "${subcommand}" failed to process`, ephemeral: true}
   switch(subcommand){
     case 'list':
@@ -23,6 +24,7 @@ const run = async(body, env) => {
     default:
       output = { content: `No valid subcommand was found: ${subcommand}`, ephemeral: true }
   }
+
   return output
 }
 
