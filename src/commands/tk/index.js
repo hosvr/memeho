@@ -1,8 +1,6 @@
-const { tk_list } = require('./list')
-const { tker_stats } = require('./user')
-const { tk_add } = require('./add')
+const { run } = require("./run")
 
-const tarkovWipes = [
+const tarkov_wipes = [
   { name: 'all', value: 'all' },
   { name: '2020-05-20', value: '2020-05-20' },
   { name: '2020-12-25', value: '2020-12-25' },
@@ -11,64 +9,59 @@ const tarkovWipes = [
   { name: '2022-06-29', value: '2022-06-29' },
 ]
 
-const run = async(body, env) => {
-  // Limit usage
-  // if (body.channel_id !== env.tarkov_channel_id){
-  //   return { content:"The `/tk` slash command can only be used in the Tarkov channel", ephemeral: true }
-  // }
-  // if (!body.member.roles.includes(env.tarkov_role_id)){ 
-  //   return { content: "Only guild members with the tarkov role may use this command", ephemeral: true }
-  // }
+const list = {
+  "name": "list",
+  "description": "see team kill summaries",
+  "type": 1,
+  "options": [
+    {
+      "name": "wipe",
+      "description": "See team kill summary for previous wipes",
+      "type": 3,
+      "required": false,
+      "choices": tarkov_wipes
+    }
+  ]
+}
 
-  const tkdata = JSON.parse(await env.TK_DATA.get("tk_instances_test"))
-  const subcommand = body.data.options[0].name
+const user = {
+  "name": "user",
+  "description": "see the team kill summary for a user",
+  "type": 1,
+  "options": [
+    {
+      "name": "name",
+      "description": "See team kill summary for specified user",
+      "type": 6,
+      "required": false
+    }
+  ]
+}
 
-  let output = { content: `ERROR: Command "${subcommand}" failed to process`, ephemeral: true}
-  switch(subcommand){
-    case 'list':
-      let wipe = env.tarkov_current_wipe
-      
-      let specified_wipe = body.data.options[0].options[0]
-      if (specified_wipe) { wipe = specified_wipe.value }
-
-      output = tk_list(tkdata, wipe)
-      break;
-    case 'user':
-      let tker = body.member.user.id
-      if (!tker){ output = { content: `No user found: \`\`\`${JSON.stringify(body.member,null, 2)}\`\`\`` }; break}
-      
-      let specified_tker = body.data.options[0].options[0]
-      if (specified_tker){ tker = specified_tker.value }
-
-      output = tker_stats(tkdata, tker)
-      break;
-    case 'add':
-      const tk_instance_info = body.data.options[0].options
-      const killer = tk_instance_info.find(o => o.name === "killer").value
-      const victim = tk_instance_info.find(o => o.name === "victim").value
-      const date = new Date()
-
-      let comment = ""
-      const comment_object = tk_instance_info.find(o => o.name === "comment")
-      if (comment_object) { comment = comment_object.value }
-
-      const tk_instance = { 
-        "killer": killer,
-        "victim": victim,
-        "wipe": env.tarkov_current_wipe,
-        "comment": comment,
-        "date": date
-      }
-
-      output = await tk_add(tkdata, tk_instance, env.TK_DATA)
-      // recordAuthor = interaction.member
-      // tkAdd(interaction, bot.tables.eftUsers, bot.tables.teamKills, recordAuthor, bot.client.user.id, currentWipe)
-      break;
-    default:
-      output = { content: `No valid subcommand was found: ${subcommand}`, ephemeral: true }
-  }
-
-  return output
+const add = {
+  "name": "add",
+  "description": "Add a team kill instance",
+  "type": 1,
+  "options": [
+    {
+      "name": "killer",
+      "description": "discord member who TK'd",
+      "type": 6,
+      "required": true
+    },
+    {
+      "name": "victim",
+      "description": "discord member who ded",
+      "type": 6,
+      "required": true
+    },
+    {
+      "name": "comment",
+      "description": "any additional comments to add",
+      "type": 3,
+      "required": false
+    }
+  ]
 }
 
 module.exports = {
@@ -76,57 +69,8 @@ module.exports = {
   name: "tk",
   description: "see EFT team kill data",
   options: [
-    {
-      "name": "list",
-      "description": "see team kill summaries",
-      "type": 1,
-      "options": [
-        {
-          "name": "wipe",
-          "description": "See team kill summary for previous wipes",
-          "type": 3,
-          "required": false,
-          "choices": tarkovWipes
-        }
-      ]
-    },
-    {
-      "name": "user",
-      "description": "see the team kill summary for a user",
-      "type": 1,
-      "options": [
-        {
-          "name": "name",
-          "description": "See team kill summary for specified user",
-          "type": 6,
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "add",
-      "description": "Add a team kill instance",
-      "type": 1,
-      "options": [
-        {
-          "name": "killer",
-          "description": "discord member who TK'd",
-          "type": 6,
-          "required": true
-        },
-        {
-          "name": "victim",
-          "description": "discord member who ded",
-          "type": 6,
-          "required": true
-        },
-        {
-          "name": "comment",
-          "description": "any additional comments to add",
-          "type": 3,
-          "required": false
-        }
-      ]
-    }
+    list,
+    user,
+    add
   ]
 }
