@@ -20,6 +20,7 @@ Secrets: `wrangler secret put SECRET_NAME`
 # creating a new command
 
 * add a package in the `src/commands` folder
+* currently the `src/handler.js` explicitly imports the tk package, the handler will need to accomadate for new commands
 * the main package file must export the properties:
 ```
 const run = async(body) => {
