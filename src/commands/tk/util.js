@@ -4,7 +4,7 @@
 const yaml = require("js-yaml");
 
 const get_tk_instances = async(env) => {
-    const tk_instances = await env.TK_DATA.get("tk_instances_test", {type: "json"})
+    const tk_instances = await env.TK_DATA.get("tk_instances", {type: "json"})
     return tk_instances
 }
 
@@ -30,7 +30,7 @@ const write_tk_instance = async(body, env) => {
     tk_instances.push(tk_instance)
 
     try {
-        const output = await env.TK_DATA.put("tk_instances_test", JSON.stringify(tk_instances))
+        const output = await env.TK_DATA.put("tk_instances", JSON.stringify(tk_instances))
         return { content: `new tk instance recorded: <@${killer}> -> <@${victim}>`, ephemeral: false }
     } catch(err) {
         console.error(err)

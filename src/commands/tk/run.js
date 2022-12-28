@@ -13,10 +13,10 @@ const run = async(body, env) => {
   let output = { content: `ERROR: Command "${subcommand}" failed to process`, ephemeral: true}
   switch(subcommand){
     case 'list':
-      output = tk_list(body, env)
+      output = await tk_list(body, env)
       break;
     case 'user':
-      output = tk_user(body, env)
+      output = await tk_user(body, env)
       break;
     case 'add':
       output = await tk_add(body, env)

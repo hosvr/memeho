@@ -68,9 +68,5 @@ module.exports = {
   run,
   name: "tk",
   description: "see EFT team kill data",
-  options: [
-    list,
-    user,
-    add
-  ]
+  options: [ list, user, add ]
 }
