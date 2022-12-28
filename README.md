@@ -1,78 +1,55 @@
 # memeho
 
-Discord bot for `memellenial city` server
+Serverless application using Cloudflare workers to handle discord interactions
 
-* [deploy](#deploy)
-* [commands](#commands) 
-* [events](#events) 
+# wrangler config
+
+* `wrangler login`
+* `wrangler dev`
+* `wrangler publish`
+
+Secrets: `wrangler secret put SECRET_NAME`
+
+# registering a slash command
+
+* this is handled automatically in github actions
+* manual steps if needed:
+  * requires env variables: `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_ID`
+  * run the register file `npm run register`
+
+# creating a new command
+
+* add a package in the `src/commands` folder
+* currently the `src/handler.js` explicitly imports the tk package, the handler will need to accomadate for new commands
+* the main package file must export the properties:
+```
+// can be seperated into a new file if there is a lot of logic
+const run = async(body) => {
+  // content = the response message to the user
+  // ephemeral = whether the message should be a whisper(true) or public (false)
+  return { content: content, ephemeral: true}
+}
+
+module.exports = {
+  name: "command name",
+  description: "command description",
+  run
+}
+```
+
+more options for types and subommands are available under [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
 
 # ci/cd
 
-Packages required for build and deployment:
-* nodesjs:16+
-* sqlite3
-* ansible
-* pip install ansible-modules-pm2
-* ansible-galaxy collection install ansible.posix
+Github actions secrets: 
 
-# starting the bot
+* `DISCORD_TOKEN`
+* `DISCORD_CLIENT_ID`
+* `DISCORD_GUILD_ID`
+* `CLOUDFLARE_TOKEN`
 
-To start the bot, a secrets file `config.json` is required at the root directory. The config files requires the following:
+# resources
 
-```
-{
-  "token": "exampleDiscordAuthToken",
-  "guildId": "1234567890",
-  "clientId": "1234567890",
-  "dbUser": "superAdmin",
-  "dbPassword": "letMeIn"
-}
-```
-
-Run `npm start` for an attached CLI session, otherwise `npm run start-dev` can be run to use `pm2` to start the process
-
-# commands
-
-Commands are created in the `/command` or the `/slashcommand` folder. A new `event` may also be needed for the bot to deploy the listener, see [events](#events) 
-
-Schema boilerplate:
-```
-module.exports = {
-  name: "ping",
-  permissions: [],
-  run: async ({message}) => {
-    message.reply("Pong!")
-  }
-}
-```
-
-# events
-
-Events are managed by the event handler and stored in the `/events` folder
-1. Add the ``client.on(`${eventName}`, ())`` syntax into the `initEvents` function in the event handler `/handlers/events.js`
-2. Create a new file `` `${eventName}.js` ``
-
-Schema boilerplate:
-```
-module.exports = {
-  name: "ready",
-  run: async (bot) => {
-    console.log(`${bot.client.user.tag} has logged in`)
-  }
-}
-```
-
-# tarkov
-
-the bot's major function is to track the discord's tarkov stats. right now, manual work needs to be done for the following:
-
-New wipe:
-  * Add the wipe into the wipe array: `slashcommands/tk.js:tarkovWipes`
-  * Update wipe variable: `slashcommands/tk.js:currentWipe`
-
-## Resources
-
-* [Discord slash commands](https://discord.com/developers/docs/interactions/application-commands)
-* [Discord slash command option types](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-type)
-* [Discord.js documentation](https://discord.js.org/#/docs/discord.js/stable/general/welcome)  
-* [Niconiconii tutorial](https://youtube.com/playlist?list=PLOlSzPEdp-bRnCzZX6qnKehutm2nb_tN-)  
+* [Discord API](https://discord.com/developers/docs/reference)
+* [Discord Application Commands](https://discord.com/developers/docs/interactions/application-commands)
+* [Discord tutorial Cloudflare workers](https://discord.com/developers/docs/tutorials/hosting-on-cloudflare-workers)
