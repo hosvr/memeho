@@ -8,6 +8,6 @@ kv_namespaces = [
 
 [vars]
 DISCORD_PUBLIC_KEY = "cd677acec866ef0eb5879773bdcb9bb4c27f283fb96d1d97428c733bf4545929"
-tarkov_current_wipe = "2022-12-28"
+tarkov_current_wipe = "2023-08-10"
 tarkov_channel_id = "706856018969231361"
 tarkov_role_id = "796051280451338241"
