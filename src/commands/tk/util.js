@@ -40,31 +40,22 @@ const write_tk_instance = async(body, env) => {
 
 
 function generate_summary(tk_instances){
-    let tk_summary = {}
-    // Unique list of killer ids
-    const killer_ids = new Set()
-    tk_instances.forEach(i => killer_ids.add(i.killer))
-  
-    // Determine victims and number of deaths per killer
-    for (const killer of killer_ids){
-      const teamKills = tk_instances.filter(i => killer === i.killer)
-  
-      // Unique list of victims per killer
-      const victim_ids = new Set()
-      teamKills.forEach(i => victim_ids.add(i.victim))
-  
-      let victim_summary = {}
-      for (const victim of victim_ids){
-        const deaths = teamKills.filter(i=> victim === i.victim).length
-        victim_summary[`<@${victim}>`] = deaths
+    // Convert to format: {killer: {victim: count}}
+    let killer_map = tk_instances.reduce((x, i) => {
+      if (!(i.killer in x)) x[i.killer] = {};
+      !(i.victim in x[i.killer]) ? x[i.killer][i.victim] = 1 : x[i.killer][i.victim]++;
+      return x;
+    }, {});
+
+    let output = [];
+    for (const [x, y] of Object.entries(killer_map)){
+      let victims = [];
+      for (const [i, k] of Object.entries(y)){
+          victims.push(`${i}: **${k}**`);
       }
-  
-      tk_summary[`<@${killer}>`] = victim_summary
+      output.push(`**${x}**: ` + victims.join(', '));
     }
-  
-    const yaml_summary = yaml.load(JSON.stringify(tk_summary))
-    const yaml_output = yaml.dump(yaml_summary, {"indent": 4})
-    return yaml_output
+    return output.join('\r\n')
 }
 
 module.exports ={
