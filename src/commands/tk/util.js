@@ -51,9 +51,9 @@ function generate_summary(tk_instances){
     for (const [x, y] of Object.entries(killer_map)){
       let victims = [];
       for (const [i, k] of Object.entries(y)){
-          victims.push(`${i}: **${k}**`);
+          victims.push(`<@${i}>: **${k}**`);
       }
-      output.push(`**${x}**: ` + victims.join(', '));
+      output.push(`**<@${x}>**: ` + victims.join(', '));
     }
     return output.join('\r\n')
 }
