@@ -1,16 +1,13 @@
-name: prod pipeline
+name: Serverless Pipeline
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+  - push
+  - workflow_dispatch
 jobs:
-  deploy-prod:
+  Pipeline:
     runs-on: ubuntu-latest
-    environment: prod
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
@@ -26,4 +23,4 @@ jobs:
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
-          command: publish --env prod
+          command: publish
