@@ -10,6 +10,7 @@ const tarkov_wipes = [
   { name: '2022-12-28', value: '2022-06-29' },
   { name: '2023-08-10', value: '2023-08-10' },
   { name: '2023-12-27', value: '2023-12-27' },
+  { name: '2024-12-26', value: '2024-12-26' },  
 ]
 
 const list = {
