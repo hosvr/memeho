@@ -20,7 +20,7 @@ jobs:
           DISCORD_CLIENT_ID: "336671031840473093"
           DISCORD_GUILD_ID: "513185519702900779"
       - name: Publish
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 #3.14.1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           command: publish
